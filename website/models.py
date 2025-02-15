@@ -23,9 +23,15 @@ class TwitterAccounts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def encrypt_data(self, data):
-        """Criptografa um valor antes de armazená-lo"""
-        return cipher.encrypt(data.encode()).decode()
+        """Encrypts data before storing it in the database."""
+        if isinstance(data, str):
+            data = data.encode()  # Convert string to bytes
+        encrypted_data = cipher.encrypt(data)
+        return encrypted_data.decode()  # Convert bytes to string for storage
 
-    def decrypt_data(self, data):
-        """Descriptografa um valor para uso"""
-        return cipher.decrypt(data.encode()).decode()
+    def decrypt_data(self, encrypted_data):
+        """Decrypts data for use."""
+        if isinstance(encrypted_data, str):
+            encrypted_data = encrypted_data.encode()  # Convert string to bytes
+        decrypted_data = cipher.decrypt(encrypted_data)
+        return decrypted_data.decode() 

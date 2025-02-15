@@ -1,14 +1,32 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from .models import db, TwitterAccounts, User
-from cryptography.fernet import Fernet
+from .process_tweet import process_tweet
 
 views = Blueprint('views', __name__)
 
-@views.route('/')
+@views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    accounts = TwitterAccounts.query.all() 
+    if request.method == 'POST':
+        data = request.form
+        tweet_url = data["tweet_url"]
+        comment_text = data["comment_text"]
+        account_name = data["account"]
+        account = TwitterAccounts.query.filter_by(account_name=account_name).first()
+
+
+        if account:
+            print(f"Account Found: {account.account_name}")
+            print(f"Account Found: {account.access_token}")
+            process_tweet(tweet_url, comment_text, account)
+            flash("Tweet processed successfully!", "success")
+        else:
+            flash("Invalid account.", "error")
+
+        return redirect(url_for("views.home"))
+    accounts = TwitterAccounts.query.all()
+    
     return render_template("index.html", user=current_user, accounts=accounts)
 
 @views.route('/register-x-account', methods=['GET', 'POST'])
