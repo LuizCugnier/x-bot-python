@@ -1,45 +1,62 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h1 class="card-title">X Bot</h1>
-                <p class="card-text">Automate liking, retweeting, and commenting on X (formerly Twitter)</p>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/">
-                    <!-- Tweet URL Input -->
-                    <div class="mb-3">
-                        <label for="tweet_url" class="form-label">Tweet URL:</label>
-                        <input type="text" class="form-control" id="tweet_url" name="tweet_url" placeholder="Enter the tweet URL" required>
-                    </div>
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white text-center">
+        <h1 class="card-title">X Bot</h1>
+        <p class="card-text">
+          Automate liking, retweeting, and commenting on X (formerly Twitter)
+        </p>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="/">
+          <!-- Tweet URL Input -->
+          <div class="mb-3">
+            <label for="tweet_url" class="form-label">Tweet URL:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="tweet_url"
+              name="tweet_url"
+              placeholder="Enter the tweet URL"
+              required
+            />
+          </div>
 
-                    <!-- Comment Text Input -->
-                    <div class="mb-3">
-                        <label for="comment_text" class="form-label">Comment Text:</label>
-                        <input type="text" class="form-control" id="comment_text" name="comment_text" placeholder="Enter your comment" required>
-                    </div>
+          <!-- Comment Text Input -->
+          <div class="mb-3">
+            <label for="comment_text" class="form-label">Comment Text:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="comment_text"
+              name="comment_text"
+              placeholder="Enter your comment"
+              required
+            />
+          </div>
 
-                    <!-- Account Selection Dropdown -->
-                    <div class="mb-3">
-                        <label for="account" class="form-label">Select Account:</label>
-                        <select class="form-select" id="account" name="account" required>
-                            <option value="" disabled selected>Choose an account</option>
-                            {% for account in accounts %}
-                                <option value="{{ account.name }}">{{ account.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+          <!-- Account Selection Dropdown -->
+          <div class="mb-3">
+            <label for="account" class="form-label">Select Account:</label>
+            <select class="form-select" id="account" name="account" required>
+              <option value="all">All Accounts</option>
+              <!-- Opção para selecionar todas -->
+              {% for account in accounts %}
+              <option value="{{ account.account_name }}">
+                {{ account.account_name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
