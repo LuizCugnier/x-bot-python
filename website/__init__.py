@@ -1,16 +1,26 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap4
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from os import path
+import os
 from flask_login import LoginManager
+from cryptography.fernet import Fernet
 
 db = SQLAlchemy()
-DB_NAME = 'database.db'
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'cryptoguys'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    fernet_key = os.environ.get('FERNET_KEY')
+    if not fernet_key:
+        # Generate a new Fernet key if not provided
+        fernet_key = Fernet.generate_key().decode()  # Decode to string
+    app.config['FERNET_KEY'] = fernet_key
+    
     db.init_app(app)
 
     Bootstrap4(app)
@@ -18,6 +28,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
+    migrate.__init__(app, db)
 
     @login_manager.user_loader
     def load_user(id):
@@ -31,12 +42,4 @@ def create_app():
 
     from .models import User, TwitterAccounts
 
-    create_database(app)
-
     return app
-
-def create_database(app):
-    if not path.exists('website/' + DB_NAME):
-        with app.app_context():
-            db.create_all()
-            print('Created Database!')
