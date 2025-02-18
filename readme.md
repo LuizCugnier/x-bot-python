@@ -1,5 +1,5 @@
 # X-Bot Python
-X-Bot Python is a simple and efficient engagement tool designed to automate interactions and improve user engagement.
+X-Bot Python is a simple engagement tool designed to automate interactions.
 
 ## Features
 
@@ -10,7 +10,7 @@ X-Bot Python is a simple and efficient engagement tool designed to automate inte
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/x-bot-python.git
+git clone https://github.com/LuizCugnier/x-bot-python.git
 cd x-bot-python
 ```
 
@@ -20,18 +20,15 @@ To run X-Bot Python using Docker, follow these steps:
 
 1. Build the Docker image:
     ```bash
-    docker build -t x-bot-python .
+    docker compose build
     ```
 
 2. Run the Docker container:
     ```bash
-    docker run -d --name x-bot-python-container x-bot-python
+    docker compose up 
     ```
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
 
-## License
-
-This project is licensed under the MIT License.
